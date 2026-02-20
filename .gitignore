@@ -44,5 +44,3 @@ bin/
 
 # Activity specifics
 NOTES.md
-/src/main/java/BFSSolver.java
-/src/main/java/DFSSolver.java
