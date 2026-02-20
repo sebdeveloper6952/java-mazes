@@ -87,7 +87,7 @@ El laberinto es un arreglo 2D `int[][]`:
 1 = camino (pueden caminar aquí)
 ```
 
-Las coordenadas son `{fila, columna}` donde `fila 0` es la parte superior y `columna 0` es la izquierda. El inicio siempre está en `{1, 1}` (esquina superior izquierda) y el final en `{size-2, size-2}` (esquina inferior derecha).
+Las coordenadas son `{fila, columna}` donde `fila 0` es la parte superior y `columna 0` es la izquierda. El inicio siempre está en `{1, 1}` (esquina superior izquierda) y el final en `{size-1, size-1}` (esquina inferior derecha).
 
 ### Exploración de Vecinos
 

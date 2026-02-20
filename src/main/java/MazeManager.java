@@ -21,6 +21,7 @@ import java.util.*;
  *   --size  N     Maze size (odd number, 11-51, default 21)
  *   --delay N     Milliseconds between steps (10-2000, default 100)
  *   --seed  N     Random seed for reproducible mazes
+ *   --print-maze  Print the maze as a 0/1 matrix (for teaching)
  *   --nocolor     Disable ANSI colors (for terminals that don't support them)
  */
 public class MazeManager {
@@ -497,6 +498,7 @@ public class MazeManager {
         String solverName = null;
         String compareName1 = null;
         String compareName2 = null;
+        boolean printMaze = false;
 
         // Parse args
         for (int i = 0; i < args.length; i++) {
@@ -523,6 +525,9 @@ public class MazeManager {
                 case "--nocolor":
                     useColor = false;
                     break;
+                case "--print-maze":
+                    printMaze = true;
+                    break;
                 case "--help":
                     printUsage();
                     return;
@@ -533,7 +538,7 @@ public class MazeManager {
             }
         }
 
-        if (solverName == null && compareName1 == null) {
+        if (solverName == null && compareName1 == null && !printMaze) {
             printUsage();
             return;
         }
@@ -543,6 +548,29 @@ public class MazeManager {
         int[][] maze = generateMaze(size, rng);
         int[] start = {1, 1};
         int[] end   = {size - 2, size - 2};
+
+        // ── Print maze as 0/1 matrix ──
+        if (printMaze) {
+            System.out.println(col(BOLD) + "Maze " + size + "x" + size +
+                    "  |  Seed: " + seed + col(RESET));
+            System.out.println("Start: {" + start[0] + ", " + start[1] + "}  " +
+                    "End: {" + end[0] + ", " + end[1] + "}");
+            System.out.println();
+            for (int r = 0; r < size; r++) {
+                StringBuilder row = new StringBuilder();
+                for (int c = 0; c < size; c++) {
+                    if (c > 0) row.append(" ");
+                    row.append(maze[r][c]);
+                }
+                System.out.println(row);
+            }
+            System.out.println();
+
+            // If only --print-maze was requested (no solver), stop here
+            if (solverName == null && compareName1 == null) {
+                return;
+            }
+        }
 
         System.out.println(col(BOLD) + "Maze size: " + size + "x" + size +
                 "  |  Seed: " + seed +
@@ -568,17 +596,20 @@ public class MazeManager {
         System.out.println("║ Usage:                                          ║");
         System.out.println("║   java MazeManager --solver <ClassName>         ║");
         System.out.println("║   java MazeManager --compare <Class1> <Class2>  ║");
+        System.out.println("║   java MazeManager --print-maze                 ║");
         System.out.println("║                                                 ║");
         System.out.println("║ Options:                                        ║");
-        System.out.println("║   --size  N    Maze size (odd, 11-51)           ║");
-        System.out.println("║   --delay N    Ms between steps (10-2000)       ║");
-        System.out.println("║   --seed  N    Random seed for maze             ║");
-        System.out.println("║   --nocolor    Disable ANSI colors              ║");
+        System.out.println("║   --size  N      Maze size (odd, 11-51)         ║");
+        System.out.println("║   --delay N      Ms between steps (10-2000)     ║");
+        System.out.println("║   --seed  N      Random seed for maze           ║");
+        System.out.println("║   --print-maze   Print maze as 0/1 matrix      ║");
+        System.out.println("║   --nocolor      Disable ANSI colors            ║");
         System.out.println("║                                                 ║");
         System.out.println("║ Examples:                                       ║");
         System.out.println("║   java MazeManager --solver BFSSolver           ║");
         System.out.println("║   java MazeManager --compare BFSSolver DFSSolver║");
         System.out.println("║   java MazeManager --solver DFSSolver --size 31 ║");
+        System.out.println("║   java MazeManager --print-maze --size 11       ║");
         System.out.println("╚══════════════════════════════════════════════════╝");
     }
 }
